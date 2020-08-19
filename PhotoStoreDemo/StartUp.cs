@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
-using Windows.Management.Deployment;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.DataTransfer.ShareTarget;
