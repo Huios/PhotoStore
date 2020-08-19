@@ -11,7 +11,7 @@
   <Identity
     Name="c0b092bd-a009-47cb-93ed-29bf2e6f5d32"
     Publisher="CN=Contoso Software (FOR LAB USE ONLY), O=Contoso Corporation, C=US"
-    Version="1.0.0.0" />
+    Version="1.0.3.0" />
 
   <Properties>
     <DisplayName>PhotoStore</DisplayName>
@@ -73,7 +73,7 @@
             </uap:SupportedFileTypes>
           </uap3:FileTypeAssociation>
         </uap3:Extension>
-        <uap:Extension Category="windows.shareTarget" Executable="PhotoStoreDemo.exe" EntryPoint="PhotoStoreDemo.App">
+        <uap:Extension Category="windows.shareTarget" Executable="PhotoStoreDemo\PhotoStoreDemo.exe" EntryPoint="PhotoStoreDemo.App">
           <uap:ShareTarget Description="Photo Store Demo">
             <uap:SupportedFileTypes>
               <uap:SupportsAnyFileType />
