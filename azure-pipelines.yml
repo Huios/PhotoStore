@@ -1,0 +1,96 @@
+trigger:
+  branches:
+    include:
+    - msix
+    - rel/*
+  paths:
+    exclude:
+    - '**/*.md'
+
+pr:
+  branches:
+    include:
+    - master
+    - rel/*
+  paths:
+    exclude:
+    - '**/*.md'
+
+variables:
+  BuildConfiguration: Release
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+- job: Build
+  pool:
+    vmImage: windows-2019
+
+  strategy:
+    matrix:
+      Channel_Prod_Web:
+        ChannelName: Production
+        DistributionUrl: https://appinstallerdemo.azurewebsites.net/ContosoDev
+        MsixPackageId: PhotoStore
+        MsixPublisherId: CN=Contoso Software (FOR LAB USE ONLY), O=Contoso Corporation, C=US
+        MsixPackageDisplayName: PhotoStore
+        MsixBuildMode: SideLoadOnly
+        #MsixGenerateAppInstaller: true
+
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core SDK 3.0.x'
+    inputs:
+      version: 3.0.x
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: custom
+      custom: tool
+      arguments: install --tool-path . nbgv
+    displayName: Install NBGV tool
+
+  - script: nbgv cloud -c -a
+    displayName: Set Version
+
+  - powershell: |
+      # Update appxmanifest. This must be done before build.
+      # Set the per-channel values into the appxmanifest, replacing the checked-in values
+      [xml]$manifest= get-content ".\Package\Package.appxmanifest"
+      $manifest.Package.Identity.Version = "$(GitBuildVersionSimple).0"
+      $manifest.Package.Identity.Name = "$(MsixPackageId)"
+      $manifest.Package.Identity.Publisher = "$(MsixPublisherId)"
+      $manifest.Package.Properties.DisplayName = "$(MsixPackageDisplayName)"
+      $manifest.Package.Applications.Application.VisualElements.DisplayName = "$(MsixPackageDisplayName)"
+      $manifest.save(".\Package\Package.appxmanifest")
+    displayName: Update manifest
+  - powershell: |
+      # Update appinstaller file
+      [xml]$file= get-content ".\Package\Package.appinstaller"
+      $file.AppInstaller.Uri = "$(DistributionUrl)/PhotoStore.appinstaller"
+      $file.AppInstaller.Version = "$(GitBuildVersionSimple).0"
+      $file.AppInstaller.MainPackage.Name = "$(MsixPackageId)"
+      $file.AppInstaller.MainPackage.Version = "$(GitBuildVersionSimple).0"
+      $file.AppInstaller.MainPackage.Publisher = "$(MsixPublisherId)"
+      $file.AppInstaller.MainPackage.Uri = "$(DistributionUrl)/Package_$(GitBuildVersionSimple).0_x64.msix"
+      $file.save(".\Package\PhotoStore.appinstaller")
+    displayName: Update appinstaller file
+  - task: MSBuild@1
+    displayName: Build for $(BuildConfiguration)
+    inputs:
+      solution: PhotoStore.sln
+      platform: x64
+      msbuildArguments: /restore /p:AppInstallerUri=$(DistributionUrl) /p:MainPackageUri=$(DistributionUrl) /p:UapAppxPackageBuildMode=$(MsixBuildMode) /p:GenerateAppInstallerFile=$(MsixGenerateAppInstaller)
+      configuration: $(BuildConfiguration)
+      maximumCpuCount: false
+
+ - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\PhotoStore_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
+    displayName: Copy appinstaller file + MSIX 
+    condition: succeeded()
+
+     # $file.AppInstaller.MainPackage.Uri = "$(DistributionUrl)/HeadTraxPackage_$(GitBuildVersionSimple).0_x64.msix"
+     # $file.save(".\HeadTraxPackage\HeadTrax.appinstaller")
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: $(ChannelName)
+      targetPath: Package/AppPackages
