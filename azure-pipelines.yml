@@ -84,9 +84,9 @@ jobs:
       configuration: $(BuildConfiguration)
       maximumCpuCount: false
 
-  - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\PhotoStore_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
-    displayName: Copy appinstaller file + MSIX 
-    condition: succeeded()
+  #- script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\PhotoStore_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
+    #displayName: Copy appinstaller file + MSIX 
+    #condition: succeeded()
 
      # $file.AppInstaller.MainPackage.Uri = "$(DistributionUrl)/HeadTraxPackage_$(GitBuildVersionSimple).0_x64.msix"
      # $file.save(".\HeadTraxPackage\HeadTrax.appinstaller")
