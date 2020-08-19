@@ -1,6 +1,7 @@
 trigger:
   branches:
     include:
+    - master
     - msix
     - rel/*
   paths:
@@ -83,7 +84,7 @@ jobs:
       configuration: $(BuildConfiguration)
       maximumCpuCount: false
 
- - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\PhotoStore_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
+  - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\PhotoStore_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
     displayName: Copy appinstaller file + MSIX 
     condition: succeeded()
 
