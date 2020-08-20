@@ -35,7 +35,7 @@ jobs:
         MsixPublisherId: CN=Contoso Software (FOR LAB USE ONLY), O=Contoso Corporation, C=US
         MsixPackageDisplayName: PhotoStore
         MsixBuildMode: SideLoadOnly
-        MsixGenerateAppInstaller: true
+        MsixGenerateAppInstaller: false
 
   steps:
   - task: UseDotNet@2
@@ -84,7 +84,7 @@ jobs:
       configuration: $(BuildConfiguration)
       maximumCpuCount: false
 
-  - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\PhotoStore_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
+  - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\Package_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
     displayName: Copy appinstaller file + MSIX 
     condition: succeeded()
 
