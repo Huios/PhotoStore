@@ -18,8 +18,11 @@ pr:
     - '**/*.md'
 
 variables:
-  BuildConfiguration: Release
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+ - group: Group-1
+ - name: BuildConfiguration 
+   value: Release
+ - name: DOTNET_SKIP_FIRST_TIME_EXPERIENCE
+   value: true
 
 jobs:
 - job: Build
@@ -83,6 +86,16 @@ jobs:
       msbuildArguments: /restore /p:AppInstallerUri=$(DistributionUrl)  /p:UapAppxPackageBuildMode=$(MsixBuildMode) /p:GenerateAppInstallerFile=$(MsixGenerateAppInstaller)
       configuration: $(BuildConfiguration)
       maximumCpuCount: false
+  
+  - task: DownloadSecureFile@1
+    inputs:
+     secureFile: "ContosoLab-2.pfx"
+    displayName: 'Download PFX from secure storage'
+
+  - script: '"C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool" sign /fd SHA256 /f $(Agent.TempDirectory)/ContosoLab-2.pfx /p $(password) $(Build.artifactStagingDirectory)/Package_$(GitBuildVersionSimple).0_x64.msix'
+    condition: succeeded()
+    displayName: 'Sign MSIX Package'
+
 
   - script: copy .\Package\PhotoStore.appinstaller Package\AppPackages\Package_$(GitBuildVersionSimple).0_x64_Test\PhotoStore.appinstaller
     displayName: Copy appinstaller file + MSIX 
