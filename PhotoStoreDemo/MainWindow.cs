@@ -179,7 +179,7 @@ namespace PhotoStoreDemo
 
         private void Rotate(object sender, RoutedEventArgs e)
         {
-            if (CurrentPhoto.Source != null)
+            if (CurrentPhoto.Source == null)
             {
                 var img = (BitmapSource) (CurrentPhoto.Source);
                 _undoStack.Push(img);
