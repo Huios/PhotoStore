@@ -11,6 +11,7 @@ using Windows.Storage.Streams;
 using System.Data;
 using System.IO;
 using System.Windows;
+using System.Runtime.CompilerServices;
 
 namespace PhotoStoreDemo
 {
@@ -122,8 +123,10 @@ namespace PhotoStoreDemo
 
             }
             shareOperation.ReportCompleted();
-            SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
-            singleInstanceManager.Run(Environment.GetCommandLineArgs());
+            //SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
+            //singleInstanceManager.Run(Environment.GetCommandLineArgs());
+            
+           
         }
 
     }
