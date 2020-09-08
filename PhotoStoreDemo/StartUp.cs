@@ -123,8 +123,9 @@ namespace PhotoStoreDemo
 
             }
             shareOperation.ReportCompleted();
-            //SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
-            //singleInstanceManager.Run(Environment.GetCommandLineArgs());
+            SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
+            singleInstanceManager.Run(Environment.GetCommandLineArgs());
+
             
            
         }
