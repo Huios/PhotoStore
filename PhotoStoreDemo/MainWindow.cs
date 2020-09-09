@@ -89,12 +89,27 @@ namespace PhotoStoreDemo
             // new file got created, adding it to the list
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() =>
             {
-                if (File.Exists(e.FullPath))
+                Boolean success = false;
+                while (!success)
                 {
-                    ImageFile item = new ImageFile(e.FullPath);
-                    Photos.Insert(0, item);
-                    PhotoListBox.SelectedIndex = 0;
-                    CurrentPhoto.Source = (BitmapSource)item.Image;
+                    //wait for copying to complete
+                    if (File.Exists(e.FullPath))
+                    {
+                        try
+                        {
+                            ImageFile item = new ImageFile(e.FullPath);
+                            Photos.Insert(0, item);
+                            PhotoListBox.SelectedIndex = 0;
+                            CurrentPhoto.Source = (BitmapSource)item.Image;
+                            success = true;
+                        }
+                        catch (Exception exc)
+                        {
+
+                        }
+                    }
+                
+                    
                 }
             }));
         }

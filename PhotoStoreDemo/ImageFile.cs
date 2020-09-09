@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // This code is licensed under the MIT License (MIT).
@@ -45,7 +45,14 @@ namespace PhotoStoreDemo
             var cachedFile = new FileInfo(System.IO.Path.Combine(PhotosFolder.Current, fi.Name));
             if (!cachedFile.Exists)
             {
-                File.Copy(fi.FullName, cachedFile.FullName);
+                try
+                {
+                    File.Copy(fi.FullName, cachedFile.FullName);
+                }
+                catch(Exception e)
+                {
+
+                }
             }
             
             
