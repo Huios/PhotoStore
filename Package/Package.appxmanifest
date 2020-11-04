@@ -53,6 +53,9 @@
             <uap:DataFormat>Bitmap</uap:DataFormat>
           </uap:ShareTarget>
         </uap:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="photostore"/>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>
