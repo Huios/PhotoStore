@@ -40,6 +40,9 @@ namespace PhotoStoreDemo
                         case ActivationKind.Launch:
                             HandleLaunch(activationArgs as LaunchActivatedEventArgs);
                             break;
+                        case ActivationKind.Protocol:
+                            HandleProtocolActivation(activationArgs as ProtocolActivatedEventArgs);
+                            break;
                         case ActivationKind.ToastNotification:
                             HandleToastNotification(activationArgs as ToastNotificationActivatedEventArgs);
                             break;
@@ -79,6 +82,27 @@ namespace PhotoStoreDemo
             if (args.Arguments != null)
             {
                 System.IO.File.WriteAllText(path, args.Arguments);
+            }
+            else
+            {
+                System.IO.File.WriteAllText(path, "No arguments available");
+            }
+
+
+            SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
+            singleInstanceManager.Run(Environment.GetCommandLineArgs());
+        }
+
+        static void HandleProtocolActivation(ProtocolActivatedEventArgs args)
+        {
+
+            string path = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}//AppInstaller.txt";
+
+            if (args.Uri != null)
+            {
+                System.IO.File.WriteAllText(path, args.Uri.ToString());
+                //System.IO.File.WriteAllText(path, args.Data.ToString());
+
             }
             else
             {
