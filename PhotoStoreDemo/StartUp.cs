@@ -47,6 +47,9 @@ namespace PhotoStoreDemo
                             HandleShareAsync(activationArgs as ShareTargetActivatedEventArgs);
                             break;
                         default:
+                            string path = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}//AppInstaller.txt";
+                            
+                            System.IO.File.WriteAllText(path, activationArgs.ToString());                           
                             HandleLaunch(null);
                             break;
                     }
@@ -55,6 +58,12 @@ namespace PhotoStoreDemo
                 //This is a direct exe based launch e.g. double click app .exe or desktop shortcut pointing to .exe
                 else
                 {
+                    if (cmdArgs[0] != null)
+                    {
+                        string path = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}//AppInstaller.txt";
+                        System.IO.File.WriteAllText(path, cmdArgs[0]);
+
+                    }
                     SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
                     singleInstanceManager.Run(cmdArgs);
                 }
@@ -65,10 +74,16 @@ namespace PhotoStoreDemo
         static void HandleLaunch(LaunchActivatedEventArgs args)
         {
 
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
-            Debug.AutoFlush = true;
-            Debug.Indent();
-            Debug.WriteLine("WPF App using a Sparse Package");
+            string path = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}//AppInstaller.txt";
+
+            if (args.Arguments != null)
+            {
+                System.IO.File.WriteAllText(path, args.Arguments);
+            }
+            else
+            {
+                System.IO.File.WriteAllText(path, "No arguments available");
+            }
 
 
             SingleInstanceManager singleInstanceManager = new SingleInstanceManager();
