@@ -524,7 +524,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource TitleText}">
-                <Span x:Name="TitleSpan">PhotoStore - Update 4</Span>
+                <Span x:Name="TitleSpan">PhotoStore - Update 5</Span>
             </TextBlock>
             <Button x:Name="buttonAddPhoto" Grid.Row="0" Grid.Column="2" Content="Add Photo" Click="AddPhoto" />
             <ListBox Style="{DynamicResource PhotoListStyle}"
